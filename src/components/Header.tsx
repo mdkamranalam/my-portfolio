@@ -105,7 +105,6 @@ const Header = () => {
       <div
         ref={innerRef}
         className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-20 xl:px-32 py-8 sm:py-10"
-        containerRef={containerRef}
       >
         <div className="flex items-center justify-between">
           {/* Logo */}

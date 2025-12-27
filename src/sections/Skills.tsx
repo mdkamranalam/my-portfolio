@@ -93,7 +93,7 @@ const Skills = () => {
           className="text-center mb-16"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          variants={titleVariants}
+          // variants={titleVariants}
         >
           <motion.h2
             className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4
