@@ -13,7 +13,6 @@ export default function SmoothScrollProvider({
       duration: 1.2, // Smoothness
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      smoothTouch: true,
     });
 
     function raf(time: number) {

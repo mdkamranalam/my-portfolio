@@ -53,18 +53,18 @@ const Skills = () => {
   ];
 
   // Staggered animation variants for cards
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-        delay: i * 0.2, // Stagger 200ms between cards
-      },
-    }),
-  };
+  // const cardVariants = {
+  //   hidden: { opacity: 0, y: 50 },
+  //   visible: (i: number) => ({
+  //     opacity: 1,
+  //     y: 0,
+  //     transition: {
+  //       duration: 0.3,
+  //       ease: "easeOut",
+  //       delay: i * 0.2, // Stagger 200ms between cards
+  //     },
+  //   }),
+  // };
 
   // Title animation
   const titleVariants = {
@@ -77,9 +77,9 @@ const Skills = () => {
   };
 
   // Skill tag hover animation
-  const tagVariants = {
-    hover: { scale: 1.05, boxShadow: "0 5px 20px rgba(139, 92, 246, 0.4)" },
-  };
+  // const tagVariants = {
+  //   hover: { scale: 1.05, boxShadow: "0 5px 20px rgba(139, 92, 246, 0.4)" },
+  // };
 
   return (
     <section
