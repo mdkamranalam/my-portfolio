@@ -1,8 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import FinComplianceImg from "../assets/projects/fincompliance-ai.png";
-// import EcoAIImg from "../assets/ecoai.png";
-// import HackathonImg from "../assets/hackathon.png";
 
 const Projects = () => {
   const sectionRef = useRef<HTMLDivElement>(null);

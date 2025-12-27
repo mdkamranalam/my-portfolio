@@ -1,6 +1,5 @@
-import React from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 
 const Skills = () => {
   const ref = useRef(null);
@@ -117,7 +116,7 @@ const Skills = () => {
 
         {/* Staggered Skills Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {skillCategories.map((category, index) => (
+          {skillCategories.map((category) => (
             <motion.div
               key={category.title}
               className="group relative bg-white/5 backdrop-blur-md border border-white/10 
