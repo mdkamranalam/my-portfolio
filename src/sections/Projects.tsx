@@ -142,6 +142,7 @@ const Projects = () => {
             </div>
           ))}
         </div>
+        <p className="text-center mt-8">NOTE: More projects are coming soon!</p>
       </div>
     </section>
   );
