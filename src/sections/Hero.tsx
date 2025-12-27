@@ -119,13 +119,13 @@ const Hero = () => {
       </Suspense>
 
       {/* Loading overlay until fully ready */}
-      {!isLoaded && (
+      {/* {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/60 pointer-events-none">
           <div className="text-white text-xl md:text-3xl animate-pulse">
             Initializing Experience...
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Vignette Shadows - Reduced width for better mobile feel */}
       <div className="absolute inset-0 pointer-events-none">
