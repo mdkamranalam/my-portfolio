@@ -116,8 +116,8 @@ const Header = () => {
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex">
-            <ul className="flex items-center gap-2 lg:gap-8">
+          <nav className="hidden md:flex">
+            <ul className="flex items-center gap-2 md:gap-8">
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <a
@@ -134,7 +134,7 @@ const Header = () => {
           {/* Mobile Hamburger */}
           <button
             onClick={toggleMenu}
-            className="lg:hidden text-white focus:outline-none focus:ring-2 focus:ring-purple-300/50 rounded transition-all duration-300 hover:scale-110"
+            className="md:hidden text-white focus:outline-none focus:ring-2 focus:ring-purple-300/50 rounded transition-all duration-300 hover:scale-110"
             aria-label="Toggle navigation menu"
           >
             <svg
