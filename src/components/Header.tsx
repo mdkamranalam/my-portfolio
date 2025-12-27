@@ -113,7 +113,7 @@ const Header = () => {
             href="/"
             className="logo font-bold text-2xl sm:text-3xl text-white hover:text-purple-300 transition-colors duration-300"
           >
-            Kamran.dev
+            Portfolio
           </a>
 
           {/* Desktop Navigation */}
