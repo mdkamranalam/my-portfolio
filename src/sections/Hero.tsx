@@ -5,8 +5,17 @@ const Spline = React.lazy(() => import("@splinetool/react-spline"));
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false); // ← NEW: Mobile detection
   const containerRef = useRef<HTMLDivElement>(null);
   const textContainerRef = useRef<HTMLDivElement>(null);
+
+  // ← NEW: Detect small devices (width < 768px)
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Mouse parallax setup
   useEffect(() => {
@@ -98,25 +107,28 @@ const Hero = () => {
   return (
     <section
       id="home"
+      ref={containerRef}
       className="w-full h-screen bg-black relative overflow-hidden"
     >
       {/* Lazy Spline with Suspense fallback */}
-      <Suspense
-        fallback={
-          <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-            <div className="text-white text-2xl animate-pulse">
-              Loading 3D Scene...
+      {!isMobile ? (
+        <Suspense
+          fallback={
+            <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+              <div className="text-white text-2xl animate-pulse">
+                Loading 3D Scene...
+              </div>
             </div>
-          </div>
-        }
-      >
-        <Spline
-          scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
-          onLoad={() => setIsLoaded(true)}
-          renderOnDemand={true}
-          className="opacity-75"
-        />
-      </Suspense>
+          }
+        >
+          <Spline
+            scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
+            onLoad={() => setIsLoaded(true)}
+            renderOnDemand={true}
+            className="opacity-75"
+          />
+        </Suspense>
+      ) : null}
 
       {/* Loading overlay until fully ready */}
       {/* {!isLoaded && (
