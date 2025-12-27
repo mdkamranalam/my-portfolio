@@ -2,6 +2,7 @@ import React, { useRef, useState, Suspense, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
+import ss from "../assets/ss.png";
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -111,7 +112,16 @@ const Hero = () => {
       className="w-full h-screen bg-black relative overflow-hidden"
     >
       {/* Lazy Spline with Suspense fallback */}
-      {!isMobile ? (
+      {isMobile ? (
+        <div className="absolute inset-0">
+          <img
+            src={ss}
+            alt="Hero background"
+            className="w-full h-full object-cover opacity-75"
+            loading="eager" // Load immediately on mobile
+          />
+        </div>
+      ) : (
         <Suspense
           fallback={
             <div className="absolute inset-0 flex items-center justify-center bg-black/80">
@@ -128,7 +138,7 @@ const Hero = () => {
             className="opacity-75"
           />
         </Suspense>
-      ) : null}
+      )}
 
       {/* Loading overlay until fully ready */}
       {/* {!isLoaded && (
