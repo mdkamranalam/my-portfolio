@@ -67,14 +67,14 @@ const Skills = () => {
   // };
 
   // Title animation
-  const titleVariants = {
-    hidden: { opacity: 0, scale: 1.05 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.2, ease: "easeOut" },
-    },
-  };
+  // const titleVariants = {
+  //   hidden: { opacity: 0, scale: 1.05 },
+  //   visible: {
+  //     opacity: 1,
+  //     scale: 1,
+  //     transition: { duration: 0.2, ease: "easeOut" },
+  //   },
+  // };
 
   // Skill tag hover animation
   // const tagVariants = {
