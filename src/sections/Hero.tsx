@@ -126,11 +126,11 @@ const Hero = () => {
             disableRemotePlayback
           >
             {/* Fallback for very old browsers */}
-            <img
+            {/* <img
               src="/hero-fallback.jpg" // Optional static fallback
               alt="Hero background"
               className="w-full h-full object-cover opacity-75"
-            />
+            /> */}
           </video>
         </div>
       ) : (
