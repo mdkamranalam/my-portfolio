@@ -18,9 +18,9 @@ const Hero = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Mouse parallax (desktop only)
+  // ← FIXED: Parallax ONLY on non-mobile (desktop/tablet)
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile) return; // ← Completely skip on mobile
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!textContainerRef.current) return;
@@ -88,7 +88,7 @@ const Hero = () => {
       ref={containerRef}
       className="relative w-full h-screen bg-black overflow-hidden"
     >
-      {/* Background: Video on mobile, Spline on desktop */}
+      {/* Mobile: Video */}
       {isMobile ? (
         <div className="absolute inset-0">
           <video
@@ -104,6 +104,7 @@ const Hero = () => {
           />
         </div>
       ) : (
+        /* Desktop: Spline */
         <Suspense
           fallback={
             <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
@@ -128,7 +129,7 @@ const Hero = () => {
         <div className="absolute right-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-l from-black/80 to-transparent" />
       </div>
 
-      {/* Text & Button - Fully Responsive */}
+      {/* Text - Responsive & No Parallax on Mobile */}
       <div
         ref={textContainerRef}
         className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
