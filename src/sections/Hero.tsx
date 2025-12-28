@@ -1,16 +1,16 @@
 import React, { useRef, useState, Suspense, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
-import Video from "../assets/cute_computer_animation.mp4";
+import VideoMP4 from "../assets/cute_computer_animation.mp4";
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isMobile, setIsMobile] = useState(false); // ← NEW: Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const textContainerRef = useRef<HTMLDivElement>(null);
 
-  // ← NEW: Detect small devices (width < 768px)
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -18,51 +18,34 @@ const Hero = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Mouse parallax setup
+  // Mouse parallax (only on non-mobile)
   useEffect(() => {
+    if (isMobile) return; // Skip on mobile for perf
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!textContainerRef.current) return;
       const { clientX, clientY } = e;
-      const x = (clientX / window.innerWidth - 0.5) * 30; // Max tilt 30px
-      const y = (clientY / window.innerHeight - 0.5) * 30;
+      const x = (clientX / window.innerWidth - 0.5) * 20; // Reduced from 30
+      const y = (clientY / window.innerHeight - 0.5) * 20;
       gsap.to(textContainerRef.current, {
         x,
         y,
-        rotationY: x * 0.5,
-        rotationX: -y * 0.5,
+        rotationY: x * 0.3,
+        rotationX: -y * 0.3,
         ease: "power2.out",
-        duration: 0.8,
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(textContainerRef.current, {
-        x: 0,
-        y: 0,
-        rotationY: 0,
-        rotationX: 0,
-        ease: "power3.out",
-        duration: 1,
+        duration: 0.6,
       });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [isMobile]);
 
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
-  // GSAP animations
   useGSAP(
     () => {
-      if (!isLoaded) return; // Wait for Spline to load
+      if (!isLoaded && !isMobile) return;
 
       const tl = gsap.timeline();
-
-      // Entrance animation
       tl.from(".hi-text", {
         opacity: 0,
         y: 50,
@@ -71,72 +54,59 @@ const Hero = () => {
       })
         .from(
           ".name-text",
-          {
-            opacity: 0,
-            y: 80,
-            duration: 1.2,
-            ease: "power4.out",
-          },
+          { opacity: 0, y: 80, duration: 1.2, ease: "power4.out" },
           "-=0.6"
         )
         .from(
           ".title-text",
-          {
-            opacity: 0,
-            y: 40,
-            duration: 1,
-            ease: "power3.out",
-          },
+          { opacity: 0, y: 40, duration: 1, ease: "power3.out" },
           "-=0.8"
+        )
+        .from(
+          ".resume-btn",
+          { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" },
+          "-=0.6"
         );
 
-      // Scroll parallax (text moves slower)
       gsap.to(textContainerRef.current, {
-        y: "30vh", // Moves up slower as you scroll down
+        y: "30vh",
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
           end: "bottom top",
-          scrub: 1, // Smooth scrubbing
+          scrub: 1,
         },
       });
     },
-    { scope: containerRef, dependencies: [isLoaded] }
+    { scope: containerRef, dependencies: [isLoaded, isMobile] }
   );
 
   return (
     <section
       id="home"
       ref={containerRef}
-      className="w-full h-screen bg-black relative overflow-hidden"
+      className="relative w-full h-screen bg-black overflow-hidden"
     >
-      {/* Lazy Spline with Suspense fallback */}
+      {/* Mobile: Video Background */}
       {isMobile ? (
         <div className="absolute inset-0">
           <video
-            src={Video}
             autoPlay
             loop
             muted
             playsInline
             className="w-full h-full object-cover opacity-75"
-            controls={false}
-            disablePictureInPicture
-            disableRemotePlayback
+            preload="auto"
           >
-            {/* Fallback for very old browsers */}
-            {/* <img
-              src="/hero-fallback.jpg" // Optional static fallback
-              alt="Hero background"
-              className="w-full h-full object-cover opacity-75"
-            /> */}
+            <source src={VideoMP4} type="video/mp4" />
           </video>
         </div>
       ) : (
+        /* Desktop: Spline */
         <Suspense
           fallback={
-            <div className="inset-0 flex items-center justify-center bg-black/80">
+            <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
               <div className="text-white text-2xl animate-pulse">
                 Loading 3D Scene...
               </div>
@@ -152,73 +122,39 @@ const Hero = () => {
         </Suspense>
       )}
 
-      {/* Loading overlay until fully ready */}
-      {/* {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 pointer-events-none">
-          <div className="text-white text-xl md:text-3xl animate-pulse">
-            Initializing Experience...
-          </div>
-        </div>
-      )} */}
-
-      {/* Vignette Shadows - Reduced width for better mobile feel */}
+      {/* Vignette */}
       <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute left-0 top-0 bottom-0 w-[30%] md:w-[40%] lg:w-[50%] 
-                        bg-gradient-to-r from-black/90 via-black/30 to-transparent"
-        />
-        <div
-          className="absolute right-0 top-0 bottom-0 w-[30%] md:w-[40%] lg:w-[50%] 
-                        bg-gradient-to-l from-black/90 via-black/30 to-transparent"
-        />
+        <div className="absolute left-0 top-0 bottom-0 w-[20%] md:w-[30%] lg:w-[40%] bg-gradient-to-r from-black/80 to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-[20%] md:w-[30%] lg:w-[40%] bg-gradient-to-l from-black/80 to-transparent" />
       </div>
 
+      {/* Text */}
       <div
         ref={textContainerRef}
-        className="absolute top-[50%] left-10 text-left max-w-2xl md:mx-10 
-                   will-change-transform perspective-1000"
+        className="absolute top-1/2 left-10 -translate-y-1/2 text-left max-w-2xl md:left-20 lg:left-32"
       >
-        {/* Subtle intro */}
-        <h2 className="text-3xl md:text-4xl font-light text-white/80 mb-2">
+        <h2 className="hi-text text-3xl md:text-4xl font-light text-white/80 mb-2">
           Hi, I'm
         </h2>
-
-        {/* Name - Hero with gradient + glow */}
         <h1
-          className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-4
-                       bg-gradient-to-r from-blue-200 via-purple-200 to-red-200
-                       bg-clip-text text-transparent
-                       drop-shadow-2xl
-                       [text-shadow:_0_4px_20px_rgba(139,92,246,0.4)]"
+          className="name-text text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-4
+                       bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent drop-shadow-2xl"
         >
           Md. Kamran Alam
         </h1>
-
-        {/* Title - Gradient with shadow */}
         <h2
-          className="text-sm md:text-xl font-medium text-white/95 mb-6
-                       bg-gradient-to-r from-purple-300 to-blue-300 
-                       bg-clip-text text-transparent
-                       drop-shadow-md"
+          className="title-text text-sm md:text-xl font-medium text-white/95 mb-8
+                       bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-md"
         >
           Full-Stack Developer | AI & Software Engineer
         </h2>
-
-        {/* Resume CTA in Hero */}
-        <div className="mt-8">
+        <div className="resume-btn">
           <a
-            href="/resume.pdf" // Or external link: "https://drive.google.com/.../view"
-            download="Md_Kamran_Alam_Resume.pdf" // Forces download with filename
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 px-4 py-2 
-               bg-purple-600/20 backdrop-blur-md border border-purple-400/50 
-               rounded-full text-white font-medium text-lg
-               hover:bg-purple-600/40 hover:border-purple-300 
-               hover:shadow-2xl hover:shadow-purple-500/30 
-               transition-all duration-500"
+            href="/resume.pdf"
+            download
+            className="group inline-flex items-center gap-3 px-6 py-3 bg-purple-600/20 backdrop-blur-md border border-purple-400/50 rounded-full text-white font-medium hover:bg-purple-600/40 hover:border-purple-300 transition-all duration-500"
           >
-            <span className="text-sm sm:text-base">Download Resume</span>
+            Download Resume
             <svg
               className="w-5 h-5 group-hover:translate-x-1 transition-transform"
               fill="none"
@@ -234,20 +170,6 @@ const Hero = () => {
             </svg>
           </a>
         </div>
-
-        {/* Description - Clean, readable with subtle backdrop */}
-        {/* <p
-            className="text-base md:text-lg leading-relaxed text-white/90
-                     bg-black/30 backdrop-blur-sm py-4 px-6 rounded-xl
-                     border border-white/10"
-          >
-            I build scalable web applications, intelligent systems, and <br />
-            production-ready software using modern technologies. Passionate
-            <br />
-            about solving real-world problems through clean architecture, secure
-            <br />
-            systems, and impactful user experiences.
-          </p> */}
       </div>
     </section>
   );
