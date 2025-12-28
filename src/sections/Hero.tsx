@@ -132,7 +132,7 @@ const Hero = () => {
       {/* Text - Responsive & No Parallax on Mobile */}
       <div
         ref={textContainerRef}
-        className="absolute inset-0 flex flex-col justify-center mb-16 px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
+        className="absolute inset-0 flex flex-col justify-center mb-24 px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
       >
         <div className="max-w-3xl">
           <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
