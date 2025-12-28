@@ -37,6 +37,46 @@ const Hero = () => {
       });
     };
 
+    // Mouse parallax setup - NOW DISABLED ON MOBILE
+    useEffect(() => {
+      // ← ADD THIS CHECK: Only run on non-mobile devices
+      if (isMobile) return;
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!textContainerRef.current) return;
+        const { clientX, clientY } = e;
+        const x = (clientX / window.innerWidth - 0.5) * 30;
+        const y = (clientY / window.innerHeight - 0.5) * 30;
+        gsap.to(textContainerRef.current, {
+          x,
+          y,
+          rotationY: x * 0.5,
+          rotationX: -y * 0.5,
+          ease: "power2.out",
+          duration: 0.8,
+        });
+      };
+
+      const handleMouseLeave = () => {
+        gsap.to(textContainerRef.current, {
+          x: 0,
+          y: 0,
+          rotationY: 0,
+          rotationX: 0,
+          ease: "power3.out",
+          duration: 1,
+        });
+      };
+
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseleave", handleMouseLeave);
+
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseleave", handleMouseLeave);
+      };
+    }, [isMobile]); // ← Add isMobile as dependency
+
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isMobile]);
