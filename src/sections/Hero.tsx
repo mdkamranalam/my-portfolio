@@ -136,7 +136,7 @@ const Hero = () => {
       ) : (
         <Suspense
           fallback={
-            <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+            <div className="inset-0 flex items-center justify-center bg-black/80">
               <div className="text-white text-2xl animate-pulse">
                 Loading 3D Scene...
               </div>
