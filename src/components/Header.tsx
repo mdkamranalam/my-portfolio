@@ -117,7 +117,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex">
-            <ul className="flex items-center gap-2 md:gap-8">
+            <ul className="flex items-center gap-4 md:gap-8">
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <a
@@ -158,7 +158,7 @@ const Header = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl lg:hidden"
+          className="fixed inset-0 z-40 bg-black/95 backdrop-blur-xl md:hidden"
           onClick={toggleMenu}
         >
           <div
