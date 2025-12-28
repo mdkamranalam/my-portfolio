@@ -7,8 +7,6 @@ import Projects from "./sections/Projects";
 import SmoothScrollProvider from "./layout";
 import ExperienceLearning from "./sections/ExperienceLearning";
 
-import "./styles/globals.css";
-
 function App() {
   return (
     <SmoothScrollProvider>
