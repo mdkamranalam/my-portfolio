@@ -2,7 +2,7 @@ import React, { useRef, useState, Suspense, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
-import ss from "../assets/ss.png";
+import Video from "../assets/cute_computer_animation.mp4";
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -114,12 +114,24 @@ const Hero = () => {
       {/* Lazy Spline with Suspense fallback */}
       {isMobile ? (
         <div className="absolute inset-0">
-          <img
-            src={ss}
-            alt="Hero background"
+          <video
+            src={Video}
+            autoPlay
+            loop
+            muted
+            playsInline
             className="w-full h-full object-cover opacity-75"
-            loading="eager" // Load immediately on mobile
-          />
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+          >
+            {/* Fallback for very old browsers */}
+            <img
+              src="/hero-fallback.jpg" // Optional static fallback
+              alt="Hero background"
+              className="w-full h-full object-cover opacity-75"
+            />
+          </video>
         </div>
       ) : (
         <Suspense
