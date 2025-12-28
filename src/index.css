@@ -4,10 +4,14 @@
 
 @layer base {
   html {
+    overscroll-behavior-y: none;
     scroll-behavior: smooth;
   }
-}
 
-html.lenis {
-  height: auto;
+  body {
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch; /* Smooth momentum on iOS */
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height — key fix for 2025 */
+  }
 }
