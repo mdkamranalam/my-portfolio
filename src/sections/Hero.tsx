@@ -118,7 +118,7 @@ const Hero = () => {
             scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
             onLoad={() => setIsLoaded(true)}
             renderOnDemand={true}
-            className="opacity-75"
+            className="opacity-70"
           />
         </Suspense>
       )}
@@ -129,56 +129,42 @@ const Hero = () => {
         <div className="absolute right-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-l from-black/80 to-transparent" />
       </div>
 
-      {/* Text - Responsive & No Parallax on Mobile */}
+      {/* Text - Let mouse events pass through to Spline */}
       <div
-        ref={textContainerRef}
-        className="absolute inset-0 flex flex-col justify-center mb-24 px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
+          ref={textContainerRef}
+          className="absolute inset-0 flex flex-col justify-center pointer-events-none px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
       >
-        <div className="max-w-3xl">
+        <div className="max-w-3xl pointer-events-auto"> {/* Only buttons/links clickable */}
           <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
             Hi, I'm
           </h2>
 
-          <h1
-            className="name-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight mb-4 md:mb-6
-                         bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent drop-shadow-2xl"
-          >
+          <h1 className="name-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight mb-4 md:mb-6
+                   bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent drop-shadow-2xl">
             Md. Kamran Alam
           </h1>
 
-          <h2
-            className="title-text text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-white/95 mb-8 md:mb-12
-                         bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-md"
-          >
+          <h2 className="title-text text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-white/95 mb-8 md:mb-12
+                   bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-md">
             Full-Stack Developer | AI & Software Engineer
           </h2>
 
           <div className="resume-btn">
             <a
-              href="/resume.pdf"
-              download="Md_Kamran_Alam_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 
-                         bg-purple-600/20 backdrop-blur-md border border-purple-400/50 
-                         rounded-full text-white font-medium text-base sm:text-lg
-                         hover:bg-purple-600/40 hover:border-purple-300 
-                         hover:shadow-2xl hover:shadow-purple-500/30 
-                         transition-all duration-500"
+                href="/resume.pdf"
+                download="Md_Kamran_Alam_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4
+                   bg-purple-600/20 backdrop-blur-md border border-purple-400/50
+                   rounded-full text-white font-medium text-base sm:text-lg
+                   hover:bg-purple-600/40 hover:border-purple-300
+                   hover:shadow-2xl hover:shadow-purple-500/30
+                   transition-all duration-500"
             >
               Download Resume
-              <svg
-                className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             </a>
           </div>
