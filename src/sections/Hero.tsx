@@ -18,9 +18,70 @@ const Hero = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // ← FIXED: Parallax ONLY on non-mobile (desktop/tablet)
+  // Touch + Orientation Parallax for mobile & tablets
   useEffect(() => {
-    if (isMobile) return; // ← Completely skip on mobile
+    if (!isMobile || !textContainerRef.current) return;
+
+    let currentX = 0;
+    let currentY = 0;
+    let targetX = 0;
+    let targetY = 0;
+
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (!e.gamma || !e.beta) return;
+      targetX = (e.gamma / 90) * 20;
+      targetY = (e.beta / 90) * 20;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0];
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      targetX = ((touch.clientX - centerX) / centerX) * 20;
+      targetY = ((touch.clientY - centerY) / centerY) * 20;
+    };
+
+    const animate = () => {
+      currentX += (targetX - currentX) * 0.1;
+      currentY += (targetY - currentY) * 0.1;
+      gsap.set(textContainerRef.current, {
+        x: currentX,
+        y: currentY,
+        rotationY: currentX * 0.3,
+        rotationX: -currentY * 0.3,
+      });
+      requestAnimationFrame(animate);
+    };
+
+    // iOS 13+ permission
+    if (typeof (DeviceOrientationEvent as any).requestPermission === "function") {
+      const requestPermission = () => {
+        (DeviceOrientationEvent as any)
+            .requestPermission()
+            .then((response: string) => {
+              if (response === "granted") {
+                window.addEventListener("deviceorientation", handleOrientation);
+              }
+            })
+            .catch(console.error);
+      };
+      window.addEventListener("touchstart", requestPermission, { once: true });
+    } else {
+      window.addEventListener("deviceorientation", handleOrientation);
+    }
+
+    window.addEventListener("touchmove", handleTouchMove);
+    animate();
+
+    return () => {
+      window.removeEventListener("deviceorientation", handleOrientation);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [isMobile]);
+
+  // Desktop Mouse Parallax (unchanged)
+  useEffect(() => {
+    if (isMobile) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!textContainerRef.current) return;
@@ -42,139 +103,139 @@ const Hero = () => {
   }, [isMobile]);
 
   useGSAP(
-    () => {
-      if (!isLoaded && !isMobile) return;
+      () => {
+        if (!isLoaded && !isMobile) return;
 
-      const tl = gsap.timeline();
-      tl.from(".hi-text", {
-        opacity: 0,
-        y: 40,
-        duration: 1,
-        ease: "power3.out",
-      })
-        .from(
-          ".name-text",
-          { opacity: 0, y: 60, duration: 1.2, ease: "power4.out" },
-          "-=0.6"
-        )
-        .from(
-          ".title-text",
-          { opacity: 0, y: 40, duration: 1, ease: "power3.out" },
-          "-=0.8"
-        )
-        .from(
-          ".resume-btn",
-          { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" },
-          "-=0.6"
-        );
+        const tl = gsap.timeline();
+        tl.from(".hi-text", {
+          opacity: 0,
+          y: 40,
+          duration: 1,
+          ease: "power3.out",
+        })
+            .from(
+                ".name-text",
+                { opacity: 0, y: 60, duration: 1.2, ease: "power4.out" },
+                "-=0.6"
+            )
+            .from(
+                ".title-text",
+                { opacity: 0, y: 40, duration: 1, ease: "power3.out" },
+                "-=0.8"
+            )
+            .from(
+                ".resume-btn",
+                { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" },
+                "-=0.6"
+            );
 
-      gsap.to(textContainerRef.current, {
-        y: "30vh",
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
-        },
-      });
-    },
-    { scope: containerRef, dependencies: [isLoaded, isMobile] }
+        gsap.to(textContainerRef.current, {
+          y: "30vh",
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      },
+      { scope: containerRef, dependencies: [isLoaded, isMobile] }
   );
 
   return (
-    <section
-      id="home"
-      ref={containerRef}
-      className="relative w-full h-screen bg-black overflow-hidden"
-    >
-      {/* Mobile: Video */}
-      {isMobile ? (
-        <div className="absolute inset-0">
-          <video
-            src={Video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-75"
-            controls={false}
-            disablePictureInPicture
-            disableRemotePlayback
-          />
-        </div>
-      ) : (
-        /* Desktop: Spline */
-        <Suspense
-          fallback={
-            <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-              <div className="text-white text-2xl animate-pulse">
-                Loading 3D Scene...
-              </div>
-            </div>
-          }
-        >
-          <Spline
-            scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
-            onLoad={() => setIsLoaded(true)}
-            renderOnDemand={true}
-            className="opacity-70"
-          />
-        </Suspense>
-      )}
-
-      {/* Vignette */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute left-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-r from-black/80 to-transparent" />
-        <div className="absolute right-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-l from-black/80 to-transparent" />
-      </div>
-
-      {/* Text - Let mouse events pass through to Spline */}
-      <div
-          ref={textContainerRef}
-          className="absolute inset-0 flex flex-col justify-center pointer-events-none px-6 mb-24 sm:px-10 md:px-16 lg:px-24 xl:px-32"
+      <section
+          id="home"
+          ref={containerRef}
+          className="relative w-full h-screen bg-black overflow-hidden"
       >
-        <div className="max-w-3xl pointer-events-auto"> {/* Only buttons/links clickable */}
-          <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
-            Hello, I'm
-          </h2>
-
-          <h1 className="name-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight mb-4 md:mb-6
-                   bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent drop-shadow-2xl">
-            Md. Kamran Alam
-          </h1>
-
-          <h2 className="title-text text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-white/95 mb-8 md:mb-12
-                   bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-md">
-            Full-Stack Developer & AI Engineer
-          </h2>
-
-          <p className="text-base sm:text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl mb-10 md:mb-12 drop-shadow-md">
-            Building scalable, intelligent applications that solve real-world problems in fintech, sustainability, and beyond.
-          </p>
-
-          <div className="resume-btn">
-            <a
-                href="/resume.pdf"
-                download="Md_Kamran_Alam_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4
-                   bg-purple-600/20 backdrop-blur-md border border-purple-400/50
-                   rounded-full text-white font-medium text-base sm:text-lg
-                   hover:bg-purple-600/40 hover:border-purple-300
-                   hover:shadow-2xl hover:shadow-purple-500/30
-                   transition-all duration-500"
+        {/* Mobile: Video */}
+        {isMobile ? (
+            <div className="absolute inset-0">
+              <video
+                  src={Video}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover opacity-75"
+                  controls={false}
+                  disablePictureInPicture
+                  disableRemotePlayback
+              />
+            </div>
+        ) : (
+            /* Desktop: Spline */
+            <Suspense
+                fallback={
+                  <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                    <div className="text-white text-2xl animate-pulse">
+                      Loading 3D Scene...
+                    </div>
+                  </div>
+                }
             >
-              Download Resume
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-            </a>
+              <Spline
+                  scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
+                  onLoad={() => setIsLoaded(true)}
+                  renderOnDemand={true}
+                  className="opacity-70"
+              />
+            </Suspense>
+        )}
+
+        {/* Vignette */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute left-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-r from-black/80 to-transparent" />
+          <div className="absolute right-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-l from-black/80 to-transparent" />
+        </div>
+
+        {/* Text - Let mouse events pass through to Spline */}
+        <div
+            ref={textContainerRef}
+            className="absolute inset-0 flex flex-col justify-center pointer-events-none px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
+        >
+          <div className="max-w-3xl pointer-events-auto">
+            <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
+              Hello, I'm
+            </h2>
+
+            <h1 className="name-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight mb-4 md:mb-6
+                   bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent drop-shadow-2xl">
+              Md. Kamran Alam
+            </h1>
+
+            <h2 className="title-text text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-white/95 mb-8 md:mb-12
+                   bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-md">
+              Full-Stack Developer & AI Engineer
+            </h2>
+
+            <p className="text-base sm:text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl mb-10 md:mb-12 drop-shadow-md">
+              Building scalable, intelligent applications that solve real-world problems in fintech, sustainability, and beyond.
+            </p>
+
+            <div className="resume-btn">
+              <a
+                  href="/resume.pdf"
+                  download="Md_Kamran_Alam_Resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4
+                 bg-purple-600/20 backdrop-blur-md border border-purple-400/50
+                 rounded-full text-white font-medium text-base sm:text-lg
+                 hover:bg-purple-600/40 hover:border-purple-300
+                 hover:shadow-2xl hover:shadow-purple-500/30
+                 transition-all duration-500"
+              >
+                Download Resume
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 };
 
