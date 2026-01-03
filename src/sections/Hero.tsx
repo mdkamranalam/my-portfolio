@@ -3,7 +3,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
-import Video from "../assets/cute_computer_animation.mp4";
+import Video from "../assets/cute_computer_animation.webm";
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
