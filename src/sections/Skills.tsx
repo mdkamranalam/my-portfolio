@@ -102,8 +102,7 @@ const Skills = () => {
             Skills
           </motion.h2>
           <motion.p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Technologies & tools I work with to build scalable, secure, and
-            intelligent systems.
+            My Tech Stack: Tools for Building Scalable, Secure, and AI-Enhanced Systems
             {/* for
             <span className="text-purple-400 font-semibold">
               {" "}
