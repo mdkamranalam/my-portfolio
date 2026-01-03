@@ -136,7 +136,7 @@ const Hero = () => {
       >
         <div className="max-w-3xl pointer-events-auto"> {/* Only buttons/links clickable */}
           <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
-            Hi, I'm
+            Hello, I'm
           </h2>
 
           <h1 className="name-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight mb-4 md:mb-6
@@ -146,8 +146,12 @@ const Hero = () => {
 
           <h2 className="title-text text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-white/95 mb-8 md:mb-12
                    bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-md">
-            Full-Stack Developer | AI & Software Engineer
+            Full-Stack Developer & AI Engineer
           </h2>
+
+          <p className="text-base sm:text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl mb-10 md:mb-12 drop-shadow-md">
+            Building scalable, intelligent applications that solve real-world problems in fintech, sustainability, and beyond.
+          </p>
 
           <div className="resume-btn">
             <a
