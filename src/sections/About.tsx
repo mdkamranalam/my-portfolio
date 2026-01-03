@@ -63,26 +63,25 @@ const About = () => {
               className="opacity-0 translate-y-6 transition-all duration-800 delay-400 ease-out
                          [.in-view_&]:opacity-100 [.in-view_&]:translate-y-0"
             >
-              I’m a Computer Science student and Full-Stack Developer with
-              hands-on experience in building end-to-end applications—from
-              designing databases and APIs to crafting responsive user
-              interfaces.
+              As a Computer Science student and passionate Full-Stack Developer, I specialize in creating end-to-end applications—from database design and API development to intuitive, responsive UIs
             </p>
             <p
               className="opacity-0 translate-y-6 transition-all duration-800 delay-600 ease-out
                          [.in-view_&]:opacity-100 [.in-view_&]:translate-y-0"
             >
-              I enjoy working on complex problem statements, especially in
-              domains like fintech, compliance automation, authentication
-              systems, and AI-powered platforms. I strongly believe in writing
-              clean, maintainable code and following industry best practices.
+              I thrive on tackling challenging problems in fintech, compliance automation, secure authentication, and AI-driven platforms, turning ideas into robust solutions.
             </p>
             <p
               className="opacity-0 translate-y-6 transition-all duration-800 delay-800 ease-out
                          [.in-view_&]:opacity-100 [.in-view_&]:translate-y-0"
             >
-              I’ve worked on multiple academic and hackathon projects, often
-              taking ownership of architecture, backend logic, and deployment.
+              I'm committed to clean, maintainable code and industry best practices, ensuring every project is scalable and efficient.
+            </p>
+            <p
+                className="opacity-0 translate-y-6 transition-all duration-800 delay-800 ease-out
+                         [.in-view_&]:opacity-100 [.in-view_&]:translate-y-0"
+            >
+              Through academic pursuits and hackathons, I've led architecture, backend implementation, and deployments, delivering production-ready systems under tight deadlines.
             </p>
           </div>
         </div>
