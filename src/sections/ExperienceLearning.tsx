@@ -23,14 +23,14 @@ const ExperienceLearning = () => {
 
   const items = [
     {
-      title: "Hackathon Participant",
+      title: "Hackathon Wins & Builds",
       subtitle: "AI-Driven Projects",
       description:
         "Competed in multiple hackathons, building intelligent systems like FinCompliance-AI (compliance automation) and ecoAI (sustainability tracker). Focused on end-to-end development under tight deadlines.",
       highlight: true,
     },
     {
-      title: "Real-World & Academic Projects",
+      title: "Academic & Real-World Projects",
       subtitle: "Full-Stack Development",
       description:
         "Designed and deployed production-ready applications involving complex backend logic, secure authentication, database architecture, and responsive frontend experiences.",
@@ -69,8 +69,7 @@ const ExperienceLearning = () => {
             Experience & Learning
           </h2>
           <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto">
-            Journey through competitive coding, real-world builds, and
-            continuous growth.
+            Professional Journey: From Hackathons to Production-Ready Solutions
           </p>
         </div>
 
