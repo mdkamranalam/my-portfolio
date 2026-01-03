@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import FinComplianceImg from "../assets/projects/fincompliance-ai.png";
+import EcoAIImg from "../assets/projects/ecoAI.png";
 
 const Projects = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -23,20 +24,20 @@ const Projects = () => {
     {
       title: "FinCompliance-AI",
       description:
-        "AI-powered regulatory compliance platform that automates document analysis, risk scoring, and audit trails for fintech companies. Built with Next.js, FastAPI, OpenAI APIs, and PostgreSQL.",
-      tech: ["Next.js", "FastAPI", "OpenAI", "PostgreSQL", "Tailwind"],
+        "AI-powered RegTech solution designed to automate the detection and reporting of suspicious transactions in full compliance with RBI/PMLA guidelines in India. The system simulates real-time transaction monitoring, applies hybrid risk scoring, and generates FIU-IND compliant Suspicious Transaction Reports (STRs) in XML format with detailed narratives. The project demonstrates a complete end-to-end compliance workflow for banks, NBFCs, and fintechs, reducing manual STR filing time from hours to seconds while ensuring regulatory traceability and explainability.",
+      tech: ["Next.js", "FastAPI", "Gemini", "PostgreSQL", "Tailwind"],
       live: "https://fin-compliance-ai.vercel.app",
       github: "https://github.com/mdkamranalam/FinCompliance-AI",
       image: FinComplianceImg,
     },
     {
-      title: "ecoAI",
+      title: "EcoAI",
       description:
-        "Sustainability tracker using AI to analyze user habits, suggest carbon reductions, and generate personalized eco-reports. Features real-time data visualization and PDF export.",
-      tech: ["React", "Node.js", "MongoDB", "Chart.js", "OpenAI"],
+        "EcoAI is an interactive web platform developed for the FutureStack GenAI hackathon (Sept 29 - Oct 5, 2025). It empowers users to reduce their carbon footprint through AI-driven insights, personalized sustainability plans, and real-time \"what-if\" simulations. Built with Next.js, Node.js/Express, Meta's Llama 3.1, Cerebras, and Docker, ecoAI combines cutting-edge AI with a polished UX to make climate action accessible.",
+      tech: ["React", "Node.js", "Llama 3.1", "FastAPI"],
       live: "https://ecoai-app.vercel.app",
       github: "https://github.com/mdkamranalam/EcoAI",
-      //   image: EcoAIImg,
+        image: EcoAIImg,
     },
     // {
     //   title: "Hackathon Winner Project",
@@ -69,8 +70,7 @@ const Projects = () => {
             Projects
           </h2>
           <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto">
-            Selected works showcasing full-stack development, AI integration,
-            and clean architecture.
+            Featured Projects: Showcasing Full-Stack Expertise and AI Innovation
           </p>
         </div>
 
@@ -142,7 +142,7 @@ const Projects = () => {
             </div>
           ))}
         </div>
-        <p className="text-center mt-8">NOTE: More projects are coming soon!</p>
+        <p className="text-center mt-8 font-bold">NOTE: More projects in the pipeline—stay tuned!</p>
       </div>
     </section>
   );
