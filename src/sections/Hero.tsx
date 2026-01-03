@@ -132,7 +132,7 @@ const Hero = () => {
       {/* Text - Let mouse events pass through to Spline */}
       <div
           ref={textContainerRef}
-          className="absolute inset-0 flex flex-col justify-center pointer-events-none px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
+          className="absolute inset-0 flex flex-col justify-center pointer-events-none px-6 mb-24 sm:px-10 md:px-16 lg:px-24 xl:px-32"
       >
         <div className="max-w-3xl pointer-events-auto"> {/* Only buttons/links clickable */}
           <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
