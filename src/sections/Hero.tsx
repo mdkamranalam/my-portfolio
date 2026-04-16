@@ -214,7 +214,7 @@ const Hero = () => {
 
             <div className="name-text mb-4 md:mb-6">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight
-                     bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent pb-2">
+                     text-purple-200 sm:text-transparent sm:bg-clip-text sm:bg-gradient-to-r sm:from-blue-200 sm:via-purple-200 sm:to-red-200 pb-2">
                 Md. Kamran Alam
               </h1>
             </div>
