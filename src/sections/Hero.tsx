@@ -27,65 +27,11 @@ const Hero = () => {
     };
   }, []);
 
-  // Touch + Orientation Parallax for mobile & tablets
+  // Touch + Orientation Parallax for mobile & tablets (DISABLED)
+  // Constant requestAnimationFrame tracking touch/orientation fights scrollTrigger physics 
+  // and completely tanks the frame rate on mobile, especially with WebGL rendering behind it.
   useEffect(() => {
-    if (!isMobile || !textContainerRef.current) return;
-
-    let currentX = 0;
-    let currentY = 0;
-    let targetX = 0;
-    let targetY = 0;
-
-    const handleOrientation = (e: DeviceOrientationEvent) => {
-      if (!e.gamma || !e.beta) return;
-      targetX = (e.gamma / 90) * 20;
-      targetY = (e.beta / 90) * 20;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const touch = e.touches[0];
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      targetX = ((touch.clientX - centerX) / centerX) * 20;
-      targetY = ((touch.clientY - centerY) / centerY) * 20;
-    };
-
-    const animate = () => {
-      currentX += (targetX - currentX) * 0.1;
-      currentY += (targetY - currentY) * 0.1;
-      gsap.set(textContainerRef.current, {
-        x: currentX,
-        y: currentY,
-        rotationY: currentX * 0.3,
-        rotationX: -currentY * 0.3,
-      });
-      requestAnimationFrame(animate);
-    };
-
-    // iOS 13+ permission
-    if (typeof (DeviceOrientationEvent as any).requestPermission === "function") {
-      const requestPermission = () => {
-        (DeviceOrientationEvent as any)
-            .requestPermission()
-            .then((response: string) => {
-              if (response === "granted") {
-                window.addEventListener("deviceorientation", handleOrientation);
-              }
-            })
-            .catch(console.error);
-      };
-      window.addEventListener("touchstart", requestPermission, { once: true });
-    } else {
-      window.addEventListener("deviceorientation", handleOrientation);
-    }
-
-    window.addEventListener("touchmove", handleTouchMove);
-    animate();
-
-    return () => {
-      window.removeEventListener("deviceorientation", handleOrientation);
-      window.removeEventListener("touchmove", handleTouchMove);
-    };
+    // Intentionally left empty to ensure lag-free scrolling on mobile
   }, [isMobile]);
 
   // Desktop Mouse Parallax (unchanged)
@@ -194,12 +140,12 @@ const Hero = () => {
             </h2>
 
             <h1 className="name-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight mb-4 md:mb-6
-                   bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent drop-shadow-2xl">
+                   bg-gradient-to-r from-blue-200 via-purple-200 to-red-200 bg-clip-text text-transparent">
               Md. Kamran Alam
             </h1>
 
             <h2 className="title-text text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-white/95 mb-8 md:mb-12
-                   bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent drop-shadow-md">
+                   bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
               Full-Stack Developer & AI Engineer
             </h2>
 
