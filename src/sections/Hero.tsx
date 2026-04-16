@@ -198,8 +198,11 @@ const Hero = () => {
 
         {/* Vignette */}
         <div className="absolute inset-0 pointer-events-none z-10">
-          <div className="absolute left-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-r from-black/80 to-transparent" />
+          {/* Strengthened left vignette to ensure text readability against bright Spline areas */}
+          <div className="absolute left-0 top-0 bottom-0 w-[85%] md:w-[65%] lg:w-[55%] bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
           <div className="absolute right-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-l from-black/80 to-transparent" />
+          {/* Subtle global dimming overlay */}
+          <div className="absolute inset-0 bg-black/20" />
         </div>
 
         {/* Text - Let mouse events pass through to Spline */}
@@ -208,7 +211,7 @@ const Hero = () => {
             className="absolute inset-0 z-20 flex flex-col justify-center pointer-events-none px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
         >
           <div className="max-w-3xl pointer-events-auto">
-            <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
+            <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-normal text-white/95 mb-2 md:mb-4 drop-shadow-md">
               Hello, I'm
             </h2>
 
@@ -220,13 +223,13 @@ const Hero = () => {
             </div>
 
             <div className="title-text mb-8 md:mb-12">
-              <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-white/95
+              <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-white
                      bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">
                 Full-Stack Developer & AI Engineer
               </h2>
             </div>
 
-            <p className="text-base sm:text-lg md:text-xl text-white/85 leading-relaxed max-w-2xl mb-10 md:mb-12 drop-shadow-md">
+            <p className="text-base sm:text-lg md:text-xl text-white font-medium leading-relaxed max-w-2xl mb-10 md:mb-12 drop-shadow-xl">
               Building scalable, intelligent applications that solve real-world problems in fintech, sustainability, and beyond.
             </p>
 
