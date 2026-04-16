@@ -3,10 +3,10 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
-import Video from "../assets/cute_computer_animation.webm";
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [shouldLoadSpline, setShouldLoadSpline] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const textContainerRef = useRef<HTMLDivElement>(null);
@@ -15,7 +15,16 @@ const Hero = () => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    
+    // Optimisation: Defer loading Spline to avoid blocking the main thread during initial page render/animations
+    const timer = setTimeout(() => {
+      setShouldLoadSpline(true);
+    }, 500);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      clearTimeout(timer);
+    };
   }, []);
 
   // Touch + Orientation Parallax for mobile & tablets
@@ -104,8 +113,7 @@ const Hero = () => {
 
   useGSAP(
       () => {
-        if (!isLoaded && !isMobile) return;
-
+        // Optimization: Do NOT wait for Spline to load. Trigger GSAP text animation immediately mount.
         const tl = gsap.timeline();
         tl.from(".hi-text", {
           opacity: 0,
@@ -140,7 +148,7 @@ const Hero = () => {
           },
         });
       },
-      { scope: containerRef, dependencies: [isLoaded, isMobile] }
+      { scope: containerRef } 
   );
 
   return (
@@ -149,43 +157,28 @@ const Hero = () => {
           ref={containerRef}
           className="relative w-full h-screen bg-black overflow-hidden"
       >
-        {/* Mobile: Video */}
-        {isMobile ? (
-            <div className="absolute inset-0">
-              <video
-                  src={Video}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover opacity-75"
-                  controls={false}
-                  disablePictureInPicture
-                  disableRemotePlayback
-              />
-            </div>
-        ) : (
-            /* Desktop: Spline */
-            <Suspense
-                fallback={
-                  <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-                    <div className="text-white text-2xl animate-pulse">
-                      Loading 3D Scene...
-                    </div>
-                  </div>
-                }
-            >
+        {/* Render Spline on all devices, optimized and deferred */}
+        <div className="absolute inset-0 z-0">
+          {shouldLoadSpline && (
+            <Suspense fallback={null}>
               <Spline
                   scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
                   onLoad={() => setIsLoaded(true)}
                   renderOnDemand={true}
-                  className="opacity-70"
+                  className={`w-full h-full transition-opacity duration-1000 ease-in-out ${
+                    isLoaded ? "opacity-70" : "opacity-0"
+                  }`}
               />
             </Suspense>
-        )}
+          )}
+
+          {/* Spline Watermark Hider */}
+          <div className="absolute bottom-0 right-0 w-48 h-20 bg-black z-10 pointer-events-none blur-xl translate-x-4 translate-y-4"></div>
+          <div className="absolute bottom-0 right-0 w-40 h-16 bg-black z-10 pointer-events-none"></div>
+        </div>
 
         {/* Vignette */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none z-10">
           <div className="absolute left-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-r from-black/80 to-transparent" />
           <div className="absolute right-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-l from-black/80 to-transparent" />
         </div>
@@ -193,7 +186,7 @@ const Hero = () => {
         {/* Text - Let mouse events pass through to Spline */}
         <div
             ref={textContainerRef}
-            className="absolute inset-0 flex flex-col justify-center pointer-events-none px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
+            className="absolute inset-0 z-20 flex flex-col justify-center pointer-events-none px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
         >
           <div className="max-w-3xl pointer-events-auto">
             <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">

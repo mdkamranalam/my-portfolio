@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <footer
       id="contacts"
-      className="w-full bg-black text-white p-14 bg-gradient-to-t from-black to-black/80"
+      className="w-full bg-black text-white bg-gradient-to-t from-black to-black/80"
     >
       {/* Contact Section */}
       <div className="py-20 px-6 sm:px-10 lg:px-20 xl:px-32">

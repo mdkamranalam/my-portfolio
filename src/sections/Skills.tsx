@@ -85,7 +85,7 @@ const Skills = () => {
     <section
       ref={ref}
       id="skills"
-      className="w-full h-full bg-black text-white p-14 top-[-48px] relative flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-20 py-20 px-6 sm:px-10 lg:px-20 xl:px-32 bg-gradient-to-b from-black/20 to-black/60"
+      className="w-full relative text-white py-20 px-6 sm:px-10 lg:px-20 xl:px-32 bg-gradient-to-b from-black/20 to-black/60"
     >
       <div className="max-w-7xl mx-auto">
         {/* Animated Section Title */}

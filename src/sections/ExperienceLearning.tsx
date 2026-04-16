@@ -53,7 +53,7 @@ const ExperienceLearning = () => {
     <section
       ref={sectionRef}
       id="experience"
-      className="w-full h-full bg-black text-white p-14 top-[-48px] relative py-20 px-6 sm:px-10 lg:px-20 xl:px-32 bg-gradient-to-b from-black/40 to-black"
+      className="w-full relative text-white py-20 px-6 sm:px-10 lg:px-20 xl:px-32 bg-gradient-to-b from-black/40 to-black"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
