@@ -3,6 +3,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 
 const Spline = React.lazy(() => import("@splinetool/react-spline"));
+import Video from "../assets/cute_computer_animation.webm";
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -108,24 +109,42 @@ const Hero = () => {
           ref={containerRef}
           className="relative w-full h-screen bg-black overflow-hidden"
       >
-        {/* Render Spline on all devices, optimized and deferred */}
+        {/* Mobile: Video | Desktop: Spline */}
         <div className="absolute inset-0 z-0">
-          {shouldLoadSpline && (
-            <Suspense fallback={null}>
-              <Spline
-                  scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
-                  onLoad={() => setIsLoaded(true)}
-                  renderOnDemand={true}
-                  className={`w-full h-full transition-opacity duration-1000 ease-in-out ${
-                    isLoaded ? "opacity-70" : "opacity-0"
-                  }`}
-              />
-            </Suspense>
+          {isMobile ? (
+            <video
+                src={Video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover opacity-75"
+                controls={false}
+                disablePictureInPicture
+                disableRemotePlayback
+            />
+          ) : (
+            shouldLoadSpline && (
+              <Suspense fallback={null}>
+                <Spline
+                    scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
+                    onLoad={() => setIsLoaded(true)}
+                    renderOnDemand={true}
+                    className={`w-full h-full transition-opacity duration-1000 ease-in-out ${
+                      isLoaded ? "opacity-70" : "opacity-0"
+                    }`}
+                />
+              </Suspense>
+            )
           )}
 
-          {/* Spline Watermark Hider */}
-          <div className="absolute bottom-0 right-0 w-48 h-20 bg-black z-10 pointer-events-none blur-xl translate-x-4 translate-y-4"></div>
-          <div className="absolute bottom-0 right-0 w-40 h-16 bg-black z-10 pointer-events-none"></div>
+          {/* Spline Watermark Hider (Only needed on desktop, but harmless on mobile) */}
+          {!isMobile && (
+            <>
+              <div className="absolute bottom-0 right-0 w-48 h-20 bg-black z-10 pointer-events-none blur-xl translate-x-4 translate-y-4"></div>
+              <div className="absolute bottom-0 right-0 w-40 h-16 bg-black z-10 pointer-events-none"></div>
+            </>
+          )}
         </div>
 
         {/* Vignette */}
