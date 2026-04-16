@@ -9,8 +9,7 @@ const Hero = () => {
   const [shouldLoadSpline, setShouldLoadSpline] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const parallaxRef = useRef<HTMLDivElement>(null);
+  const textContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -30,40 +29,37 @@ const Hero = () => {
 
   // Touch + Orientation Parallax for mobile & tablets
   useEffect(() => {
-    if (!isMobile || !parallaxRef.current) return;
+    if (!isMobile || !textContainerRef.current) return;
+
+    let currentX = 0;
+    let currentY = 0;
+    let targetX = 0;
+    let targetY = 0;
 
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (!e.gamma || !e.beta) return;
-      const targetX = (e.gamma / 90) * 20;
-      const targetY = (e.beta / 90) * 20;
-
-      gsap.to(parallaxRef.current, {
-        x: targetX,
-        y: targetY,
-        rotationY: targetX * 0.3,
-        rotationX: -targetY * 0.3,
-        duration: 0.5,
-        ease: "power2.out",
-        overwrite: "auto"
-      });
+      targetX = (e.gamma / 90) * 20;
+      targetY = (e.beta / 90) * 20;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       const touch = e.touches[0];
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-      const targetX = ((touch.clientX - centerX) / centerX) * 20;
-      const targetY = ((touch.clientY - centerY) / centerY) * 20;
+      targetX = ((touch.clientX - centerX) / centerX) * 20;
+      targetY = ((touch.clientY - centerY) / centerY) * 20;
+    };
 
-      gsap.to(parallaxRef.current, {
-        x: targetX,
-        y: targetY,
-        rotationY: targetX * 0.3,
-        rotationX: -targetY * 0.3,
-        duration: 0.5,
-        ease: "power2.out",
-        overwrite: "auto"
+    const animate = () => {
+      currentX += (targetX - currentX) * 0.1;
+      currentY += (targetY - currentY) * 0.1;
+      gsap.set(textContainerRef.current, {
+        x: currentX,
+        y: currentY,
+        rotationY: currentX * 0.3,
+        rotationX: -currentY * 0.3,
       });
+      requestAnimationFrame(animate);
     };
 
     // iOS 13+ permission
@@ -78,13 +74,13 @@ const Hero = () => {
             })
             .catch(console.error);
       };
-      window.addEventListener("touchstart", requestPermission, { once: true, passive: true });
+      window.addEventListener("touchstart", requestPermission, { once: true });
     } else {
       window.addEventListener("deviceorientation", handleOrientation);
     }
 
-    // Passive touchmove listener to ensure flawless scrolling
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove);
+    animate();
 
     return () => {
       window.removeEventListener("deviceorientation", handleOrientation);
@@ -92,26 +88,26 @@ const Hero = () => {
     };
   }, [isMobile]);
 
-  // Desktop Mouse Parallax
+  // Desktop Mouse Parallax (unchanged)
   useEffect(() => {
-    if (isMobile || !parallaxRef.current) return;
+    if (isMobile) return;
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (!textContainerRef.current) return;
       const { clientX, clientY } = e;
       const x = (clientX / window.innerWidth - 0.5) * 20;
       const y = (clientY / window.innerHeight - 0.5) * 20;
-      gsap.to(parallaxRef.current, {
+      gsap.to(textContainerRef.current, {
         x,
         y,
         rotationY: x * 0.3,
         rotationX: -y * 0.3,
         ease: "power2.out",
         duration: 0.6,
-        overwrite: "auto"
       });
     };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isMobile]);
 
@@ -141,7 +137,7 @@ const Hero = () => {
                 "-=0.6"
             );
 
-        gsap.to(scrollRef.current, {
+        gsap.to(textContainerRef.current, {
           y: "30vh",
           ease: "none",
           scrollTrigger: {
@@ -162,15 +158,14 @@ const Hero = () => {
           className="relative w-full h-screen bg-black overflow-hidden"
       >
         {/* Render Spline on all devices, optimized and deferred */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 z-0">
           {shouldLoadSpline && (
             <Suspense fallback={null}>
               <Spline
                   scene="https://prod.spline.design/3LMqapGwkkMij2LQ/scene.splinecode"
                   onLoad={() => setIsLoaded(true)}
                   renderOnDemand={true}
-                  style={{ pointerEvents: 'none' }}
-                  className={`w-full h-full cursor-default pointer-events-none transition-opacity duration-1000 ease-in-out ${
+                  className={`w-full h-full transition-opacity duration-1000 ease-in-out ${
                     isLoaded ? "opacity-70" : "opacity-0"
                   }`}
               />
@@ -188,12 +183,12 @@ const Hero = () => {
           <div className="absolute right-0 top-0 bottom-0 w-[25%] md:w-[35%] lg:w-[45%] bg-gradient-to-l from-black/80 to-transparent" />
         </div>
 
-        {/* Text - Decoupled wrapper for scrolling and parallax */}
+        {/* Text - Let mouse events pass through to Spline */}
         <div
-            ref={scrollRef}
+            ref={textContainerRef}
             className="absolute inset-0 z-20 flex flex-col justify-center pointer-events-none px-6 sm:px-10 md:px-16 lg:px-24 xl:px-32"
         >
-          <div ref={parallaxRef} className="max-w-3xl pointer-events-auto">
+          <div className="max-w-3xl pointer-events-auto">
             <h2 className="hi-text text-2xl sm:text-3xl md:text-4xl font-light text-white/80 mb-2 md:mb-4">
               Hello, I'm
             </h2>
