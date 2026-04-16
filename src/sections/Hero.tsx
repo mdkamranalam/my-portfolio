@@ -83,15 +83,20 @@ const Hero = () => {
                 "-=0.6"
             );
 
-        gsap.to(textContainerRef.current, {
-          y: "30vh",
-          ease: "none",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: 1,
-          },
+        // Use GSAP matchMedia to strictly enable scroll parallax ONLY on desktop
+        // This ensures mobile scrolling remains 100% native and lag-free
+        let mm = gsap.matchMedia();
+        mm.add("(min-width: 768px)", () => {
+          gsap.to(textContainerRef.current, {
+            y: "30vh",
+            ease: "none",
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: 1,
+            },
+          });
         });
       },
       { scope: containerRef } 
