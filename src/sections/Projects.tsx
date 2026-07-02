@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import FinComplianceImg from "../assets/projects/fincompliance-ai.png";
-import EcoAIImg from "../assets/projects/ecoAI.png";
+import CredixaImg from "../assets/projects/credixa_img.jpeg";
 
 const Projects = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -22,6 +22,15 @@ const Projects = () => {
 
   const projects = [
     {
+      title: "Credixa",
+      description:
+        "Next-Gen Education Buy Now, Pay Later (BNPL) ecosystem featuring autonomous AI underwriting, OCR document digitization, and transparent student credit evaluation.",
+      tech: ["React", "NodeJS", "PostgreSQL", "FastAPI", "Tailwind", "Docker"],
+      live: "https://credixa-8wlw.onrender.com/",
+      github: "https://github.com/mdkamranalam/credixa",
+      image: CredixaImg,
+    },
+    {
       title: "FinCompliance-AI",
       description:
         "AI-powered RegTech solution designed to automate the detection and reporting of suspicious transactions in full compliance with RBI/PMLA guidelines in India. The system simulates real-time transaction monitoring, applies hybrid risk scoring, and generates FIU-IND compliant Suspicious Transaction Reports (STRs) in XML format with detailed narratives. The project demonstrates a complete end-to-end compliance workflow for banks, NBFCs, and fintechs, reducing manual STR filing time from hours to seconds while ensuring regulatory traceability and explainability.",
@@ -30,15 +39,15 @@ const Projects = () => {
       github: "https://github.com/mdkamranalam/FinCompliance-AI",
       image: FinComplianceImg,
     },
-    {
-      title: "EcoAI",
-      description:
-        "EcoAI is an interactive web platform developed for the FutureStack GenAI hackathon (Sept 29 - Oct 5, 2025). It empowers users to reduce their carbon footprint through AI-driven insights, personalized sustainability plans, and real-time \"what-if\" simulations. Built with Next.js, Node.js/Express, Meta's Llama 3.1, Cerebras, and Docker, ecoAI combines cutting-edge AI with a polished UX to make climate action accessible.",
-      tech: ["React", "Node.js", "Llama 3.1", "FastAPI"],
-      live: "https://ecoai-app.vercel.app",
-      github: "https://github.com/mdkamranalam/EcoAI",
-        image: EcoAIImg,
-    },
+    // {
+    //   title: "EcoAI",
+    //   description:
+    //     "EcoAI is an interactive web platform developed for the FutureStack GenAI hackathon (Sept 29 - Oct 5, 2025). It empowers users to reduce their carbon footprint through AI-driven insights, personalized sustainability plans, and real-time \"what-if\" simulations. Built with Next.js, Node.js/Express, Meta's Llama 3.1, Cerebras, and Docker, ecoAI combines cutting-edge AI with a polished UX to make climate action accessible.",
+    //   tech: ["React", "Node.js", "Llama 3.1", "FastAPI"],
+    //   live: "https://ecoai-app.vercel.app",
+    //   github: "https://github.com/mdkamranalam/EcoAI",
+    //     image: EcoAIImg,
+    // },
     // {
     //   title: "Hackathon Winner Project",
     //   description:
